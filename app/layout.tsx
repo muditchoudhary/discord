@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
-import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import "./globals.css";
 
 const font = Open_Sans({ subsets: ["latin"] });
 
@@ -17,8 +19,17 @@ export default function RootLayout({
 }) {
 	return (
 		<ClerkProvider>
-			<html lang="en">
-				<body className={font.className}>{children}</body>
+			<html lang="en" suppressHydrationWarning>
+				<body className={`${font.className} border-2 border-solid border-blue-700`}>
+					<ThemeProvider
+						attribute="class"
+						defaultTheme="dark"
+						enableSystem={false}
+						storageKey="discord-theme"
+					>
+						{children}
+					</ThemeProvider>
+				</body>
 			</html>
 		</ClerkProvider>
 	);
