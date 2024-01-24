@@ -29,7 +29,7 @@ model Profile {
 model Server {
     id String @id @default(uuid())
     name String
-    image String @db.Text
+    imageUrl String @db.Text
     inviteCode String @db.Text
 
     profileId String
@@ -48,6 +48,7 @@ enum MemberRole {
     ADMIN
     MEMBER
     GUEST
+    MODERATOR
 }
 
 model Member {
@@ -70,7 +71,7 @@ model Member {
 enum ChannelType {
     TEXT
     AUDIO
-    VIDOE
+    VIDEO
 }
 
 model Channel {
