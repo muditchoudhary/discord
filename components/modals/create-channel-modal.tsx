@@ -7,6 +7,7 @@ import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import { ChannelType } from "@prisma/client";
 import qs from "query-string";
+import { useEffect } from "react";
 
 import {
 	Dialog,
@@ -49,14 +50,16 @@ export const CreateChannelModal = () => {
 	const params = useParams();
 	const { type, data, isOpen, onClose, onOpen } = useModal();
 
+    const { channelType } = data;
+    
 	const form = useForm({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			name: "",
-			type: ChannelType.TEXT,
+            name: "",
+			type: channelType || ChannelType.TEXT,
 		},
 	});
-
+    
 	const isLoading = form.formState.isSubmitting;
 	const isModalOpen = isOpen && type === "createChannel";
 
@@ -72,6 +75,7 @@ export const CreateChannelModal = () => {
 
 			form.reset();
 			router.refresh();
+			onClose();
 		} catch (error) {
 			console.log(error);
 		}
@@ -81,6 +85,14 @@ export const CreateChannelModal = () => {
 		form.reset();
 		onClose();
 	};
+
+	useEffect(() => {
+        if (channelType) {
+            form.setValue("type", channelType);
+        } else {
+            form.setValue("type", ChannelType.TEXT)
+        }
+    }, [channelType, form]);
 	return (
 		<Dialog open={isModalOpen} onOpenChange={handleClose}>
 			<DialogContent className="bg-white text-black p-0 overflow-hidden">
